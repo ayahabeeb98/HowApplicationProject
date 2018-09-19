@@ -15,7 +15,5 @@ class Expert extends Model
       'remember_token' , 'password'
     ];
 
-    public function categories(){
-        return $this->belongsTo(Category::class,'category_id','id');
-    }
+
 }

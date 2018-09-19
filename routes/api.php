@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('history/{id?}','Api\UserApiController@history');
+Route::get('showHistory/{u_id?}','Api\UserApiController@showHistory');
