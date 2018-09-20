@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('history/{id?}','Api\UserApiController@history');
 Route::get('showHistory/{u_id?}','Api\UserApiController@showHistory');
+Route::get('recommended','Api\UserApiController@recommendedVideos');
