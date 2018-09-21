@@ -6,6 +6,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\MessageBag;
+use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
@@ -27,5 +29,14 @@ class Controller extends BaseController
             ],$status)->header('Content-Type','application/json');
         }
 
+    }
+
+    public function uploadImage($image, $dir = 'Image')
+    {
+        $uploadedImage = $image;
+        $imageName = time() . '.' . $uploadedImage->getClientOriginalExtension();
+        $direction = public_path($dir . '/');
+        $uploadedImage->move($direction, $imageName);
+        return $dir . '/' . $imageName;
     }
 }

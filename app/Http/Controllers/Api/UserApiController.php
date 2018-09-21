@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\History;
+use App\User;
 use App\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserApiController extends Controller
 {
@@ -20,15 +23,44 @@ class UserApiController extends Controller
      * @return string
      *
      */
+
+    public function Register(Request $request){
+        $validation = Validator::make($request->all(),$this->rules());
+        if ($validation->fails()) {
+            return parent::errors($validation->errors());
+        }
+        $user = new User();
+        $user->image = parent::uploadImage($request->file('image'));
+        $request['password'] = Hash::make($request->input('password'));
+        $user->fill($request->all());
+        $user->save();
+        return parent::success($user);
+    }
+
+
+    public function ApiLogout(Request $request){
+        dd($request->user()->token()->revoke());
+        Auth::guard('api')->logout();
+        return  redirect()->route('recommended.videos');
+    }
+
+    private function rules(){
+        $rules = [
+            'FirstName' => 'required|string|max:255',
+            'LastName' => 'required|string|max:255',
+            'UserName' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|min:9|max:20|unique:users',
+            'visaCard' => 'required|string|min:7|max:19|unique:users',
+            'image' => 'required|image',
+            'password' => 'required|string|min:6|confirmed',
+        ];
+        return $rules;
+    }
+
     public function history($video_id){
         try{
             $video = Video::findOrFail($video_id);
-
-            //using query Query Builder
-//            DB::table('history')->insert([
-//                'user_id' =>  Auth::guard('api')->id(),
-//                'video_id' => $video_id
-//            ]);
 
             $history = new History();
             $history->user_id = Auth::guard('api')->id();
@@ -48,8 +80,9 @@ class UserApiController extends Controller
      * @return Controller
      */
 
-    public function showHistory($user_id){
+    public function showHistory(){
         try{
+            $user_id =  Auth::guard('api')->id();
             $user = History::findOrFail($user_id);
             $videos = DB::table('history')
                 ->join('videos','videos.id','=','history.video_id')

@@ -12,11 +12,16 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::group(['namespace' => 'Api'],function (){
+    Route::group(['middleware' => ['auth:api']],function() {
+        Route::post('history/{v_id?}',['as' => 'history.add','uses'=>'UserApiController@history']);
+        Route::get('showHistory',['as'=>'user.history','uses'=>'UserApiController@showHistory']);
+        Route::get('custom/logout/',['as' => 'user.logout', 'uses'=> 'UserApiController@ApiLogout' ]);
+    });
 
-Route::post('history/{id?}','Api\UserApiController@history');
-Route::get('showHistory/{u_id?}','Api\UserApiController@showHistory');
-Route::get('recommended','Api\UserApiController@recommendedVideos');
+    Route::post('/register',['as'=>'user.store','uses'=>'UserApiController@Register']);
+    Route::get('recommended',['as'=>'recommended.videos','uses'=>'UserApiController@recommendedVideos']);
+});

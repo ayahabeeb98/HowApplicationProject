@@ -11,4 +11,8 @@ class History extends Model
             'user_id','video_id',
     ];
     protected $dates = ['created_at','updated_at'];
+
+    public function video(){
+        $this->belongsTo('videos','video_id','id');
+    }
 }
