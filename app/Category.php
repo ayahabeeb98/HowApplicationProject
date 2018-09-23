@@ -13,4 +13,8 @@ class Category extends Model
     ];
 
     protected $dates = ['created_at','updated_at'];
+
+    public function videos(){
+        return $this->hasMany(Video::class,'category_id','id');
+    }
 }

@@ -11,10 +11,23 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
+Route::group(['middleware'=>'auth'],function () {
+    Route::group(['prefix' => 'video'], function () {
+        Route::get('/create','VideoController@create');
+        Route::post('/create',['as'=>'video.create','uses'=>'VideoController@store']);
+        Route::get('/all/{num?}', ['as' => 'video.index', 'uses' => 'VideoController@index']);
+        Route::get('/destroy/{id?}',['as'=>'video.destroy','uses'=>'VideoController@destroy']);
+        Route::get('/edit/{id}',['as'=>'video.edit','uses'=>'VideoController@edit']);
+        Route::put('update/{id}', ['as' => 'video.update', 'uses' => 'VideoController@update']);
+    });
+    Route::group(['prefix' => 'user'],function (){
+       Route::get('all/',['as' => 'user.index','uses'=>'UserController@index']);
+    });
+    Route::get('/logout/custom', ['as' => 'logout.custom', 'uses' => 'Controller@userLogout']);
+
+});
 
 Route::get('/home', 'HomeController@index')->name('home');

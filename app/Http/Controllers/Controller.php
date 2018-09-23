@@ -6,12 +6,23 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function userLogout()
+    {
+        Auth::logout();
+        Session::flush();
+        return redirect()->route('login');
+    }
+
     public function success($data,$status = 200){
         return response()->json([
             'status' => 'success',

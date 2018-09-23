@@ -13,6 +13,6 @@ class History extends Model
     protected $dates = ['created_at','updated_at'];
 
     public function video(){
-        $this->belongsTo('videos','video_id','id');
+        return $this->belongsTo(Video::class,'video_id','id');
     }
 }

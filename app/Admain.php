@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Auth;
 
-class Admain extends Model
+class Admain extends Auth
 {
     protected  $table = 'admins';
     protected $fillable = [

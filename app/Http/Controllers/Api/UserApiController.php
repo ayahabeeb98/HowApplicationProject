@@ -15,49 +15,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UserApiController extends Controller
 {
-
-
     /**
      *
      * @param $video_id
      * @return string
      *
      */
-
-    public function Register(Request $request){
-        $validation = Validator::make($request->all(),$this->rules());
-        if ($validation->fails()) {
-            return parent::errors($validation->errors());
-        }
-        $user = new User();
-        $user->image = parent::uploadImage($request->file('image'));
-        $request['password'] = Hash::make($request->input('password'));
-        $user->fill($request->all());
-        $user->save();
-        return parent::success($user);
-    }
-
-
-    public function ApiLogout(Request $request){
-        dd($request->user()->token()->revoke());
-        Auth::guard('api')->logout();
-        return  redirect()->route('recommended.videos');
-    }
-
-    private function rules(){
-        $rules = [
-            'FirstName' => 'required|string|max:255',
-            'LastName' => 'required|string|max:255',
-            'UserName' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|min:9|max:20|unique:users',
-            'visaCard' => 'required|string|min:7|max:19|unique:users',
-            'image' => 'required|image',
-            'password' => 'required|string|min:6|confirmed',
-        ];
-        return $rules;
-    }
-
     public function history($video_id){
         try{
             $video = Video::findOrFail($video_id);
@@ -97,12 +60,10 @@ class UserApiController extends Controller
     }
 
     public function recommendedVideos(){
-        $video = DB::table('history')
-            ->select('video_id',DB::raw('count(*) as total'))
-            ->groupBy('video_id')
-            ->orderBy('total','desc')
-            ->get();
-
+        $video = Video::withCount('Histories')
+            ->has('Histories','>',0)
+            ->orderBy('histories_count','desc')
+             ->get();
         return parent::success($video);
     }
 
