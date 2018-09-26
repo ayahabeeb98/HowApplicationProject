@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\History;
 use App\Video;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,14 +34,14 @@ class VideoApiController extends Controller
                         ->where('videos.name', 'like','%'.$item.'%')
                         ->orWhere('categories.name', 'like', '%'.$item.'%')
                         ->select('videos.*','categories.name AS category_name','categories.id As category_id',
-                        DB::raw("CONCAT('videos.image',URL::to('/').'videos.image') as 'video_image'")
+                        DB::raw("CONCAT('".URL::to('/')."',videos.image) as 'video_image'")
                         );
                 }
             }else{
 
             $videos=$videos
                 ->select('videos.*',
-                    DB::raw("CONCAT('videos.image',URL::to('/').'videos.image') as 'video_image'"));
+                    DB::raw("CONCAT('".URL::to('/')."',videos.image) as 'video_image'"));
         }
             return parent::success($videos->paginate($request->input('per_page', 10)));
     }
@@ -54,11 +55,26 @@ class VideoApiController extends Controller
     {
         try{
             $video = Video::findOrFail($id);
-            $video['image']=URL::to('/').$video['image'];
+            $video['image']=URL::to('').$video['image'];
+            $categoy = $video->category;
             return parent::success($video);
         } catch (ModelNotFoundException $modelNotFoundException) {
             return parent::error('video not found');
         }
     }
+
+
+    public function recommendedVideos(){
+        $video = Video::withCount('Histories')
+            ->has('Histories','>',0)
+            ->orderBy('histories_count','desc')
+            ->get();
+
+        return parent::success($video);
+
+    }
+
+
+
 
 }

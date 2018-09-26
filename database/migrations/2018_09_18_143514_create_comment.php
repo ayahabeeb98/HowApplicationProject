@@ -19,7 +19,8 @@ class CreateComment extends Migration
            $table->integer('video_id')->unsigned();
            $table->string('comment');
            $table->timestamps();
-           $table->foreign('user_id')->references('id')
+            $table->softDeletes();
+            $table->foreign('user_id')->references('id')
                ->on('users')->onDelete('cascade');
            $table->foreign('video_id')->references('id')
                ->on('videos')->onDelete('cascade');

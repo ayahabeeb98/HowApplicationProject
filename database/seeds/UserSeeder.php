@@ -24,8 +24,6 @@ class UserSeeder extends Seeder
                 'visaCard' => $faker->phoneNumber,
                 'image' => $image,
                 'password' => \Illuminate\Support\Facades\Hash::make('123456'),
-                'interest' => $faker->title
-
             ]);
         };
     }

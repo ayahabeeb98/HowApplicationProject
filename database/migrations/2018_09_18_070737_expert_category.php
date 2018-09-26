@@ -15,8 +15,7 @@ class ExpertCategory extends Migration
     {
         Schema::table('experts',function (Blueprint $table){
            $table->integer('category_id')->unsigned();
-           $table->foreign('category_id')->references('id')
-               ->on('categories')->onDelete('cascade');
+
         });
     }
 
@@ -27,8 +26,8 @@ class ExpertCategory extends Migration
      */
     public function down()
     {
-        Schema::table('experts',function (Blueprint $table){
-           $table->dropForeign('category_id');
-        });
+//        Schema::table('experts',function (Blueprint $table){
+//           $table->dropColumn('category_id');
+//        });
     }
 }

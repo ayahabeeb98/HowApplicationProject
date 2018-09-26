@@ -17,7 +17,9 @@ class Searche extends Migration
            $table->increments('id');
            $table->integer('user_id')->unsigned();
            $table->string('content');
-           $table->foreign('user_id')->references('id')
+           $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('user_id')->references('id')
                ->on('users')->onDelete('cascade');
         });
     }

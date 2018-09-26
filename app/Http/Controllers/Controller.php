@@ -32,13 +32,15 @@ class Controller extends BaseController
     }
 
     public function errors($data,$status=400){
-        if($data instanceof MessageBag){
-            return response()->json([
-                'status' => 'error',
-                'data' => $data->first(),
-                'errors' => 1
-            ],$status)->header('Content-Type','application/json');
-        }
+        if ($data instanceof MessageBag)
+            $data = $data->first();
+        $response = response()->json([
+            'status' => 'error',
+            'data' => $data,
+            'errors' => 1
+        ], $status)
+            ->header('Content-type', 'application/json');
+        return $response;
 
     }
 

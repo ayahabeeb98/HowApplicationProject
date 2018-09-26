@@ -14,7 +14,7 @@ class videosSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         $categories = \App\Category::all()->pluck('id')->toArray();
-        $image = $faker->image(public_path('Image'));
+        $image = $faker->image(public_path('/Image'));
         $image = str_replace(public_path(),'',$image);
         foreach (range(0,20) as $index){
             \App\Video::create([

@@ -23,9 +23,20 @@ Route::group(['middleware'=>'auth'],function () {
         Route::get('/edit/{id}',['as'=>'video.edit','uses'=>'VideoController@edit']);
         Route::put('update/{id}', ['as' => 'video.update', 'uses' => 'VideoController@update']);
     });
+
+    Route::group(['prefix' => 'category'], function () {
+        Route::get('create', 'CategoryController@create');
+        Route::post('create', ['as' => 'category.create', 'uses' => 'CategoryController@store']);
+        Route::get('/all', ['as' => 'category.index', 'uses' => 'CategoryController@index']);
+        Route::get('destroy/{id}', ['as' => 'category.destroy', 'uses' => 'CategoryController@destroy']);
+        Route::get('edit/{id}', ['as' => 'category.edit', 'uses' => 'CategoryController@edit']);
+        Route::put('update/{id}', ['as' => 'category.update', 'uses' => 'CategoryController@update']);
+    });
+
     Route::group(['prefix' => 'user'],function (){
        Route::get('all/',['as' => 'user.index','uses'=>'UserController@index']);
     });
+
     Route::get('/logout/custom', ['as' => 'logout.custom', 'uses' => 'Controller@userLogout']);
 
 });
