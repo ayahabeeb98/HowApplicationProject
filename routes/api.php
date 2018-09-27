@@ -15,6 +15,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::group(['namespace' => 'Api'],function (){
+
+    Route::group(['prefix' => 'password' , 'middleware' => 'api'],function (){
+        Route::post('create', 'PasswordResetController@create');
+        Route::get('find/{token}', 'PasswordResetController@find');
+        Route::post('reset', 'PasswordResetController@reset');
+    });
+
     Route::group(['middleware' => ['auth:api']],function() {
         Route::post('history/{video_id}',['as' => 'history.add','uses'=>'UserApiController@history']);
         Route::get('showHistory',['as'=>'user.history','uses'=>'UserApiController@showHistory']);
