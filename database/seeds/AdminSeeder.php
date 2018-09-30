@@ -13,7 +13,7 @@ class AdminSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         foreach (range(0,2) as $index){
-            $image = $faker->image(public_path('image'));
+            $image = $faker->image(public_path('Image'));
             $image = str_replace(public_path(),'',$image);
             $admin = \App\Admain::create([
                 'userName' => $faker->userName,

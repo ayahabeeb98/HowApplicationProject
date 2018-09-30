@@ -17,5 +17,12 @@ class Admain extends Auth
     ];
 
     protected $dates = ['created_at','updated_at'];
+
+    public function getImage()
+    {
+        if (!$this->image)
+            return asset('no_image.png');
+        return asset($this->image);
+    }
 }
 

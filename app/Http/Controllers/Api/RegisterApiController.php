@@ -33,10 +33,10 @@ class RegisterApiController extends Controller
             'FirstName' => 'required|string|max:255',
             'LastName' => 'required|string|max:255',
             'UserName' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|email|email|max:255|unique:users',
             'phone' => 'required|string|min:9|max:20|unique:users',
             'visaCard' => 'required|string|min:7|max:19|unique:users',
-            'image' => 'required|image',
+            'image' => 'image',
             'password' => 'required|string|min:6',
         ];
         return $rules;

@@ -47,6 +47,8 @@
           type="text/css"
           id="style_color"/>
     <link href="{{asset('/control/assets/layouts/layout/css/custom.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('/control/assets/pages/css/profile.min.css')}}" rel="stylesheet" type="text/css" />
+
 
 @endif
 

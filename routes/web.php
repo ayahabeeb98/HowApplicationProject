@@ -15,6 +15,10 @@
 
 Auth::routes();
 Route::group(['middleware'=>'auth'],function () {
+    Route::group(['prefix' => 'admin'],function (){
+        Route::get('profile/{id}', ['as' => 'admin.profile', 'uses' => 'AdminController@show']);
+        Route::put('profile/{id}', ['as' => 'admin.update', 'uses' => 'AdminController@update']);
+    });
     Route::group(['prefix' => 'video'], function () {
         Route::get('/create','VideoController@create');
         Route::post('/create',['as'=>'video.create','uses'=>'VideoController@store']);

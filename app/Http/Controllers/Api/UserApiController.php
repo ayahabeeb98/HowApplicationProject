@@ -11,12 +11,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class UserApiController extends Controller
 {
+    /**
+     * show all user data
+     * @return Controller
+     */
     public function show()
     {
         try{
@@ -28,86 +33,111 @@ class UserApiController extends Controller
         }
     }
 
-    /**
-     *
-     * @param $video_id
-     * @return string
-     *
-     */
-    public function history($video_id){
+    public function updateName(Request $request){
         try{
-            $video = Video::findOrFail($video_id);
-            $history = new History();
-            $history->user_id = Auth::guard('api')->id();
-            $history->video_id = $video_id;
-            $history->save();
-
-            return parent::success($history);
-
-        }catch (ModelNotFoundException $modelNotFoundException){
-            return parent::errors('Video not found');
-        }
-    }
-
-    /**
-     * return videos as object
-     * @param $user_id
-     * @return Controller
-     */
-
-    public function showHistory(){
-        try{
-            $user_id =  Auth::guard('api')->id();
-            $user = History::findOrFail($user_id);
-            $videos = DB::table('history')
-                ->join('videos','videos.id','=','history.video_id')
-                ->select('videos.*')
-                ->where('user_id','=',$user_id)->get();
-
-//        $videos = $videos->paginate(15);
-            return parent::success($videos);
+            $user = User::findOrFail(Auth::id());
+            $id = Auth::id();
+            $validator = Validator::make($request->all(),
+                ['UserName' => 'required|string|max:255|unique:users,userName,'.$id],
+                [
+                    'UserName.required' => 'userName is required',
+                    'UserName.unique' => 'This username is already in use'
+                ]
+            );
+            if ($validator->fails()){
+                return parent::errors($validator->errors());
+            }
+            $user->fill($request->all());
+            $user->update();;
+            return parent::success($user->UerName);
         }catch (ModelNotFoundException $modelNotFoundException){
             return parent::errors('user not found');
         }
     }
 
-    public function addFavorite($video_id){//done
+    public function updatePassword(Request $request){
         try{
-            $video = Video::findOrFail($video_id);
-            $favorite = new Favorite();
-            $favorite->video_id = $video_id;
-            $favorite->user_id =Auth::guard('api')->user()->id;
-            $favorite->save();
-            return parent::success($favorite);
-        }catch (ModelNotFoundException $modeuserlNotFoundException){
-            return parent::errors(' Something went wrong');
-        }
-    }
-
-    public function deleteFavorite($v_id){//done
-        try{
-        $favorite = Favorite::findOrFail($v_id);
-        $favorite->delete();
-        return parent::success($favorite);
-    }catch (ModelNotFoundException $exception){
-            return parent::errors('Video not found');
-        }
-    }
-
-    public function showFavorite(){
-        try{
-            $user_id = Auth::guard('api')->id();
-            $user = Favorite::findOrFail($user_id);
-            $favorite = DB::table('favouritevideos')
-                ->join('videos','videos.id','=','favouritevideos.video_id')
-                ->select('videos.*')
-                ->where('user_id','=',$user_id)->get();
-            return parent::success($favorite);
+            $user = User::findOrFail(Auth::id());
+            $id = Auth::id();
+            $currentPassword = User::where(['id' => $id])->value('password');
+            $newPassword = Hash::make($request->input('current_password'));
+            if ($newPassword == $currentPassword){
+                $validator = Validator::make($request->all(),
+                    ['password' => 'required|string|min:6|confirm'],
+                    [
+                        'password.required' => 'Password is required',
+                    ]
+                );
+                if ($validator->fails()){
+                    return parent::errors($validator->errors());
+                }
+                $user->fill(Hash::make($request->input('password')));
+                $user->update();
+            }else{
+                return parent::errors('password does not match');
+            }
+            return parent::success($user->password);
         }catch (ModelNotFoundException $modelNotFoundException){
-            return parent::errors('there is no video');
+            return parent::errors('user not Found');
         }
     }
 
+    public function updateEmail(Request $request){
+        try{
+            $user = User::findOrFail(Auth::id());
+            $id = Auth::id();
+            $validator = Validator::make($request->all(),
+                ['email' => 'required|email|unique:users,email,'.$id],
+                [
+                    'email.required' => 'Email is required',
+                    'email.email' => 'invalid Email format',
+                    'email.unique' => 'This email is already in use'
+                ]
+            );
+            if ($validator->fails()){
+                return parent::errors($validator->errors());
+            }
+            $user->fill($request->all());
+            $user->update();
+            return parent::success($user->email);
+        }catch (ModelNotFoundException $modelNotFoundException){
+            return parent::errors('user not found');
+        }
+    }
 
+    public function updatePhone(Request $request){
+        try{
+            $user = User::findOrFail(Auth::id());
+            $id = Auth::id();
+            $validator = Validator::make($request->all(),
+                ['phone' => 'required|string|min:9|max:20|unique:users,phone,'.$id],
+                [
+                    'phone.required' => 'phone number is required',
+                    'phone.unique' => 'This phone number is already in use'
+                ]
+            );
+            if ($validator->fails()){
+                return parent::errors($validator->errors());
+            }
+            $user->fill($request->all());
+            $user->update();;
+            return parent::success($user->phone);
+        }catch (ModelNotFoundException $modelNotFoundException){
+            return parent::errors('user not found');
+        }
+    }
+
+    public function updateImage(Request $request){
+        $user = User::findOrFail(Auth::id());
+        if ($request->hasFile('image')) {
+            if (File::exists(public_path($user->Image))) {
+                File::delete(public_path($user->Image));
+            }
+            $user->image = parent::uploadImage($request->file('image'));
+        }
+
+        return parent::success(URL::to('/').$user->image);
+
+    }
 
 }

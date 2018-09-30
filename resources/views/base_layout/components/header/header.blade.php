@@ -348,7 +348,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
                         <li>
-                            <a href="page_user_profile_1.html">
+                            <a href={{route('admin.profile',['id' => \Illuminate\Support\Facades\Auth::user()->id])}}>
                                 <i class="icon-user"></i> My Profile </a>
                         </li>
                         <li>

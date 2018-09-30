@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
 //        $this->call(CategorySeeder::class);
 //        $this->call(videosSeeder::class);
 //        $this->call(historySeeder::class);
-//        $this->call(AdminSeeder::class);
+        $this->call(AdminSeeder::class);
 //        $this->call(favoriteSeeder::class);
 //        $this->call(videosSeeder::class);
 //        $this->call(SearchSeeder::class);
-          $this->call(CommentsSeeder::class);
+//          $this->call(CommentsSeeder::class);
 
     }
 }
