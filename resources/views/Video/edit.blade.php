@@ -4,7 +4,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <a href="{{route('video.index')}}">Videos</a>
-                <i class="fa fa-video-camera"></i>
+                <i  class="fa fa-angle-double-right"></i>
             </li>
             <li>
                 <span>Edit</span>

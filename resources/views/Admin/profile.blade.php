@@ -23,7 +23,7 @@
                 <div class="portlet light profile-sidebar-portlet bordered">
                     <!-- SIDEBAR USERPIC -->
                     <div class="">
-                        <img src="{{$admin->image}}" class="img-responsive  " alt=""> </div>
+                        <img src="{{$admin->getImage()}}" class="img-responsive  " alt=""> </div>
                     <!-- END SIDEBAR USERPIC -->
                     <!-- SIDEBAR USER TITLE -->
                     <div class="profile-usertitle">

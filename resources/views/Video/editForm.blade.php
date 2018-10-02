@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Edit Video</title>
 </head>
 <body>
 <form action="{{route('video.update',['id'=>$video->id])}}" method="post" enctype="multipart/form-data">

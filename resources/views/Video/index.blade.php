@@ -25,8 +25,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-success">
-                <div class="panel panel-heading"><i class="fa fa-search"></i>Search</div>
-                <div class="panel panel-body">
+                <div class="panel-heading"><i class="fa fa-search"></i>Search</div>
+                <div class="panel-body">
                     <form action="{{route('video.index')}}" method="get">
                         <div class=" form-group col-sm-4">
                             <label for="name">Name</label>
@@ -56,7 +56,7 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>video_youtube_id</th>
+                            {{--<th>video_youtube_id</th>--}}
                             <th>Url</th>
                             <th>Category_id</th>
                             <th>Options</th>
@@ -66,7 +66,7 @@
                         @foreach($videos as $video)
                             <tr>
                                 <td>{{$video->name}}</td>
-                                <td>{{$video->video_id}}</td>
+{{--                                <td>{{$video->video_id}}</td>--}}
                                 <td>{{$video->url}}</td>
                                 <td>{{$video->category_id}}</td>
                                 <td>

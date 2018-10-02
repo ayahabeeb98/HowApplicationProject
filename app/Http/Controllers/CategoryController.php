@@ -34,7 +34,7 @@ class CategoryController extends Controller
         $category = Category::where([]);
         if ($request->has('name'))
             $category = $category->where('name', 'like', '%' . $request->input('name') . '%');
-        $data['category'] = $category->paginate(3);
+        $data['category'] = $category->paginate(10);
         return view('Cindex', $data);
     }
 

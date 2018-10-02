@@ -46,6 +46,27 @@
         </li>
         <li class="nav-item start ">
             <a href="javascript:;" class="nav-link nav-toggle">
+                <i class="fa fa-list-ul"></i>
+                <span class="title">Category</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="nav-item start ">
+                    <a href="{{route('category.index')}}" class="nav-link ">
+                        <i class="fa fa-list"></i>
+                        <span class="title">Show</span>
+                    </a>
+                </li>
+                <li class="nav-item start">
+                    <a href="{{route('category.create')}}" class="nav-link ">
+                        <i class="fa fa-plus"></i>
+                        <span class="title">Add</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item start ">
+            <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="fa fa-video-camera"></i>
                 <span class="title">Video</span>
                 <span class="arrow"></span>

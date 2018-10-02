@@ -21,4 +21,11 @@ class Video extends Model
     public function category(){
         return $this->belongsTo(Category::class,'category_id','id');
     }
+
+    public function getImage()
+    {
+        if (!$this->image)
+            return asset('no_image.png');
+        return asset($this->image);
+    }
 }
